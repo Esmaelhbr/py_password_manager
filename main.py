@@ -1,3 +1,4 @@
+import io
 import json
 from tkinter import *
 from tkinter import  messagebox
@@ -45,26 +46,38 @@ def save():
     is_ok = False
     user_info = website + " | " + email + " | " + password + "\n"
 
-    if len(website) == 0  or  len(password) == 0:
+    if len(website) == 0 or len(password) == 0:
         messagebox.showinfo(title="retry", message="Dont leave empty fields")
     else:
-        with open("data.json", mode="r" ) as data_file:
-            #reading old data
-            data = json.load(data_file)
-            #updating old data with new data
+        try:
+            with open("data.json", mode="r") as data_file:
+                # reading old data
+                data = json.load(data_file)
+        except FileNotFoundError:
+            with open ("data.json", "w") as data_file:
+                json.dump(new_data, data_file, indent=4)
+        else:
+             # updating old data with new data
             data.update(new_data)
-
-
-        with open("data.json", "w") as data_file:
-            # saving updated data
-            json.dump(data, data_file, indent=4)
-
-
-
-
-            website_entry.delete(0,END)
+        finally:
+            website_entry.delete(0, END)
             password_entry.delete(0, END)
 
+        # with open("data.json", "w") as data_file:
+        #     # saving updated data
+        #     json.dump(data, data_file, indent=4)
+
+
+
+
+
+
+        # with open("data.json", "w") as data_file:
+        #     # saving updated data
+        #     json.dump(data, data_file, indent=4)
+        #
+        #     website_entry.delete(0, END)
+        #     password_entry.delete(0, END)
 
 
 
